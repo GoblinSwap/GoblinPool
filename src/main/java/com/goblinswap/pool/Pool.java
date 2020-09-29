@@ -14,7 +14,7 @@ import static io.nuls.contract.sdk.Utils.require;
 public class Pool extends LPTokenWrapper implements Contract {
     public Address iToken;
 
-    public static long DURATION = 864000;
+    public static long DURATION = 864000 * 2;
     public static long startTime = 0;
 
     public long periodFinish = 0;
@@ -49,7 +49,7 @@ public class Pool extends LPTokenWrapper implements Contract {
     }
 
     private void checkFinsh() {
-        require(Block.timestamp() >= startTime + DURATION, "not finish");
+        require(Block.timestamp() >= startTime + DURATION / 2, "not finish");
     }
 
     private void updateReward(Address account) {
@@ -68,17 +68,16 @@ public class Pool extends LPTokenWrapper implements Contract {
 
 
     private BigInteger rewardPerToken() {
-        BigInteger rewardPerTokenStored = BigInteger.ZERO;
         if (_totalSupply().equals(BigInteger.ZERO)) {
             return rewardPerTokenStored;
         }
 
         return rewardPerTokenStored.
-                add(BigInteger.valueOf(lastTimeRewardApplicable())).
-                subtract(BigInteger.valueOf(lastUpdateTime)).
-                multiply(rewardRate).
-                multiply(BigInteger.valueOf((long) 1e8)).
-                divide(_totalSupply());
+                add(BigInteger.valueOf(lastTimeRewardApplicable()).
+                        subtract(BigInteger.valueOf(lastUpdateTime)).
+                        multiply(rewardRate).
+                        multiply(BigInteger.valueOf((long) 1e8)).
+                        divide(_totalSupply()));
     }
 
     @View
@@ -141,7 +140,7 @@ public class Pool extends LPTokenWrapper implements Contract {
         stake();
     }
 
-    public void getReward() {
+    private void getReward() {
         checkStart();
         BigInteger trueReward = _earned(Msg.sender());
 

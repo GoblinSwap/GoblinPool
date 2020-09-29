@@ -149,7 +149,7 @@ public class Pool extends LPTokenWrapper implements Contract {
             String[][] a = new String[][]{new String[]{Msg.sender().toString()}, new String[]{trueReward.toString()}};
             iToken.call("mint", null, a, null);
             emit(new RewardPaid(Msg.sender(), trueReward));
-            updateReward(Msg.sender());
+            updateReward(null);
         }
 
     }

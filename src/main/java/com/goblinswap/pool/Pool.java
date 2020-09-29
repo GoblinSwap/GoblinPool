@@ -83,7 +83,7 @@ public class Pool extends LPTokenWrapper implements Contract {
     @View
     public BigInteger earned(Address account) {
         return _earned(account);
-    }
+    } 
 
     private BigInteger _earned(Address account) {
         BigInteger userRewardPer = BigInteger.ZERO;
